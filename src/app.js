@@ -13,16 +13,17 @@ app.use(cors());
 const repositories = [];
 
 function logRequests(req, res, next) {
-  const {method, url} = req;
+   const {method, url, ip } = req;
 
-  const logLabel = `[${method.toUpperCase()}] ${url}`
-  console.count('️\n#️⃣ ')
-  console.log(`📃 ${logLabel}`)
-  console.time(`⏱`)
-  next();
-  console.timeEnd(`⏱`)
+   const logLabel = `[${method.toUpperCase()}] ${url}`
+   console.count('️\n#️⃣ ')
+   console.log(`🖥 ${req.headers['x-forwarded-for'] || req.connection.remoteAddress}`)
+   console.log(`📃 ${logLabel}`)
+   console.time(`⏱`)
+   next();
+   console.timeEnd(`⏱`)
 
-}
+};
 
 function validateId(req, res, next) {
   const {id} = req.params;
@@ -32,7 +33,7 @@ function validateId(req, res, next) {
   };
   
   return next();
-}
+};
 
 app.use(logRequests);
 app.use('/repositories/:id', validateId);
